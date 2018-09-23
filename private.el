@@ -18,6 +18,7 @@
 ;  :config
 ;  (mode-icons-mode t))
 
+
 ;; Clojure ecosystem
 (use-package cider
   :ensure t
@@ -34,3 +35,8 @@
          ("C-c r" . cider-repl-reset)
          ("C-c ." . cider-reset-test-run-tests))
   )
+
+
+;; Docker
+(use-package dockerfile-mode
+  :ensure t)
