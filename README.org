@@ -25,7 +25,7 @@
 * Quick Start
 
 #+BEGIN_SRC sh
-brew install gnutls the_silver_searcher aspell 
+brew install gnutls the_silver_searcher aspell
 mv ~/.emacs.d ~/.emacs.d.bak
 git clone https://github.com/freetonik/castlemacs ~/.emacs.d
 #+END_SRC
@@ -141,12 +141,6 @@ A canonical version of Emacs for macOS can be found at https://emacsformacosx.co
 - No native support for =org-protocol=
 
 ** Install dependencies
-
-[[https://github.com/railwaycat/homebrew-emacsmacport/releases][Emacs-mac]] port relies on [[https://www.gnutls.org][GnuTLS]] library to make TLS/SSL connections. Install it:
-
-#+BEGIN_SRC sh
-brew install gnutls
-#+END_SRC
 
 Castlemacs relies on [[https://github.com/ggreer/the_silver_searcher][The Silver Searcher]] to quickly search within a project. Install it:
 
