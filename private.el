@@ -42,3 +42,11 @@
 ;; Docker
 (use-package dockerfile-mode
   :ensure t)
+
+
+;; Org mode settings
+;; Store all my org files in ~/Dropbox/org.
+(setq org-directory "~/Dropbox/org")
+
+;; And all of those files should be in included agenda.
+(setq org-agenda-files '("~/Dropbox/org"))
