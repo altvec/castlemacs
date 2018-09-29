@@ -2,22 +2,31 @@
 ;; This file will not be affected by Castlemacs updates.
 
 
+;; =======
+;; VISUALS
+
+
+;; Modeline settings
+;(use-package mode-icons
+;  :ensure t
+;  :config
+;  (mode-icons-mode t))
+
+(setq column-number-mode t)
+
+
 ;; Replace default font
 (set-face-attribute 'default nil :font "Fira Code 14")
 
 
 ;; Please stop making noises
 (defun my-bell-function ())
-
 (setq ring-bell-function 'my-bell-function)
 (setq visible-bell nil)
 
 
-;; Mode line
-;(use-package mode-icons
-;  :ensure t
-;  :config
-;  (mode-icons-mode t))
+;; ===========
+;; PROGRAMMING
 
 
 ;; Clojure ecosystem
@@ -44,7 +53,9 @@
   :ensure t)
 
 
-;; Org mode settings
+;; ========
+;; ORG MODE
+
 ;; Store all my org files in ~/Dropbox/org.
 (setq org-directory "~/Dropbox/org")
 
