@@ -11,8 +11,17 @@
 ;  :ensure t
 ;  :config
 ;  (mode-icons-mode t))
-
 (setq column-number-mode t)
+
+
+;; Doom themes
+(use-package doom-themes
+  :ensure t)
+(load-theme 'doom-one t)
+;; Enable custom neotree theme
+(doom-themes-neotree-config)
+;; Orgmode improvements
+(doom-themes-org-config)
 
 
 ;; Replace default font
