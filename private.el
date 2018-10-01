@@ -127,3 +127,10 @@
 
 ;; Org capture
 (global-set-key (kbd "C-c c") 'org-capture)
+
+
+;; Org babel. Used to run code in SRC blocks.
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((javascript . t)
+   (python . t)))
