@@ -2,6 +2,11 @@
 ;; This file will not be affected by Castlemacs updates.
 
 
+;; User info
+(setq user-full-name "Sergey Kalistratov")
+(setq user-mail-address "kalistratov@fastmail.com")
+
+
 ;; =======
 ;; VISUALS
 
