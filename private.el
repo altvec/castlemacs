@@ -143,6 +143,15 @@
                            (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
 
 
+;; Python
+(use-package pipenv
+  :hook (python-mode . pipenv-mode)
+  :init
+  (setq
+   pipenv-projectile-after-switch-function
+   #'pipenv-projectile-after-switch-extended))
+
+
 ;; ========
 ;; ORG MODE
 
