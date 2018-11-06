@@ -6,100 +6,27 @@
 (setq user-full-name "Sergey Kalistratov")
 (setq user-mail-address "kalistratov@fastmail.com")
 
+;; Fix dired errors 'ls does not support --dired'
+(when (string= system-type "darwin")
+  (setq dired-use-ls-dired nil))
+
 
 ;; =======
 ;; VISUALS
 
 
 ;; Modeline settings
-;(use-package mode-icons
-;  :ensure t
-;  :config
-;  (mode-icons-mode t))
 (setq column-number-mode t)
 
 
-;; Doom themes
-(use-package doom-themes
-  :ensure t)
-;;(load-theme 'doom-tomorrow-day t)
-;; Enable custom neotree theme
-;;(doom-themes-neotree-config)
-;; Orgmode improvements
-;;(doom-themes-org-config)
-
-
 ;; Replace default font
-(set-face-attribute 'default nil :font "Fira Code 15")
-;; Fix Fira Code ligatures
-(when (window-system)
-  (set-frame-font "Fira Code"))
-(let ((alist '((33 . ".\\(?:\\(?:==\\|!!\\)\\|[!=]\\)")
-               (35 . ".\\(?:###\\|##\\|_(\\|[#(?[_{]\\)")
-               (36 . ".\\(?:>\\)")
-               (37 . ".\\(?:\\(?:%%\\)\\|%\\)")
-               (38 . ".\\(?:\\(?:&&\\)\\|&\\)")
-               (42 . ".\\(?:\\(?:\\*\\*/\\)\\|\\(?:\\*[*/]\\)\\|[*/>]\\)")
-               (43 . ".\\(?:\\(?:\\+\\+\\)\\|[+>]\\)")
-               (45 . ".\\(?:\\(?:-[>-]\\|<<\\|>>\\)\\|[<>}~-]\\)")
-               (46 . ".\\(?:\\(?:\\.[.<]\\)\\|[.=-]\\)")
-               (47 . ".\\(?:\\(?:\\*\\*\\|//\\|==\\)\\|[*/=>]\\)")
-               (48 . ".\\(?:x[a-zA-Z]\\)")
-               (58 . ".\\(?:::\\|[:=]\\)")
-               (59 . ".\\(?:;;\\|;\\)")
-               (60 . ".\\(?:\\(?:!--\\)\\|\\(?:~~\\|->\\|\\$>\\|\\*>\\|\\+>\\|--\\|<[<=-]\\|=[<=>]\\||>\\)\\|[*$+~/<=>|-]\\)")
-               (61 . ".\\(?:\\(?:/=\\|:=\\|<<\\|=[=>]\\|>>\\)\\|[<=>~]\\)")
-               (62 . ".\\(?:\\(?:=>\\|>[=>-]\\)\\|[=>-]\\)")
-               (63 . ".\\(?:\\(\\?\\?\\)\\|[:=?]\\)")
-               (91 . ".\\(?:]\\)")
-               (92 . ".\\(?:\\(?:\\\\\\\\\\)\\|\\\\\\)")
-               (94 . ".\\(?:=\\)")
-               (119 . ".\\(?:ww\\)")
-               (123 . ".\\(?:-\\)")
-               (124 . ".\\(?:\\(?:|[=|]\\)\\|[=>|]\\)")
-               (126 . ".\\(?:~>\\|~~\\|[>=@~-]\\)")
-               )
-             ))
-  (dolist (char-regexp alist)
-    (set-char-table-range composition-function-table (car char-regexp)
-                          `([,(cdr char-regexp) 0 font-shape-gstring]))))
-(mac-auto-operator-composition-mode)
+(set-face-attribute 'default nil :font "Monaco 14")
+
 
 ;; Please stop making noises
 (defun my-bell-function ())
 (setq ring-bell-function 'my-bell-function)
 (setq visible-bell nil)
-
-
-;; Shackle
-(use-package shackle
-  :init
-  (setq shackle-default-alignment 'below
-        shackle-default-size 0.4
-        shackle-rules '((helm-mode              :align below  :select t)
-                        (helpful-mode           :align below)
-                        (dired-mode             :ignore t)
-
-                        (compilation-mode       :select t     :size 0.25)
-                        ("*compilation*"        :select nil   :size 0.25)
-                        ("*ag search*"          :select nil   :size 0.25)
-                        ("*Flycheck errors*"    :select nil   :size 0.25)
-                        ("*Warninigs*"          :select nil   :size 0.25)
-                        ("*Error*"              :select nil   :size 0.25)
-
-                        ("*Org Links*"          :select nil   :size 0.2)
-
-                        ("*undo-tree*"          :align right)
-                        (neotree-mode           :align left)
-                        (magit-status-mode      :align bottom :size 0.5   :inhibit-window-quit t)
-                        (magit-log-mode         :same t                   :inhibit-window-quit t)
-                        (magit-commit-mode      :ignore t)
-                        (magit-diff-mode        :select nil   :align left :size 0.5)
-                        (git-commit-mode        :same t)
-                        (vc-annotate-mode       :same t)
-                        ("^\\*git-gutter.+\\*$" :regexp t     :size 15    :noselect t)))
-  :config
-  (shackle-mode 1))
 
 
 ;; ===========
@@ -132,7 +59,6 @@
 ;; Javascript
 (use-package js2-mode)
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-
 ;; Better imenu
 (add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
 
@@ -159,6 +85,37 @@
 
 ;; ========
 ;; ORG MODE
+
+;; Nicer bullets
+(font-lock-add-keywords 'org-mode
+                        '(("^ +\\([-*]\\) "
+                           (0 (prog1 () (compose-region
+                                         (match-beginning 1)
+                                         (match-end 1) "•"))))))
+(use-package org-bullets
+    :ensure t)
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+
+(let* ((variable-tuple (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
+                             ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
+                             ((x-list-fonts "Verdana")         '(:font "Verdana"))
+                             ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
+                             (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
+       (base-font-color     (face-foreground 'default nil 'default))
+       (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+
+  (custom-theme-set-faces 'user
+                          `(org-level-8 ((t (,@headline ,@variable-tuple))))
+                          `(org-level-7 ((t (,@headline ,@variable-tuple))))
+                          `(org-level-6 ((t (,@headline ,@variable-tuple))))
+                          `(org-level-5 ((t (,@headline ,@variable-tuple))))
+                          `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
+                          `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
+                          `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
+                          `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
+                          `(org-document-title ((t (,@headline ,@variable-tuple :height 1.5 :underline nil))))))
+
+
 
 ;; Store all my org files in ~/Dropbox/org.
 (setq org-directory "~/Dropbox/org")
