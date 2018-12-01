@@ -20,7 +20,7 @@
 
 
 ;; Replace default font
-(set-face-attribute 'default nil :font "Monaco 14")
+(set-face-attribute 'default nil :font "Input Mono Narrow 15")
 
 
 ;; Please stop making noises
@@ -31,6 +31,10 @@
 
 ;; ===========
 ;; PROGRAMMING
+
+
+;; Newline at end of file
+(setq require-final-newline t)
 
 
 ;; Clojure ecosystem
@@ -57,18 +61,34 @@
 
 
 ;; Javascript
-(use-package js2-mode)
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-;; Better imenu
-(add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
+(use-package js2-mode
+  :ensure t
+  :interpreter (("node" . js2-mode))
+  :bind (:map js2-mode-map ("C-c C-p" . js2-print-json-path))
+  :mode "\\.\\(js\\|json\\)$"
+  :config
+  (add-hook 'js-mode-hook 'js2-minor-mode)
+  (setq js2-basic-offset 2
+        js2-indent-level 2
+        js2-highlight-level 3
+        js2-mode-show-parse-errors nil
+        js2-mode-show-strict-warnings nil))
 
-(use-package js2-refactor)
+
+(use-package js2-refactor
+  :defer t
+  :diminish js2-refactor-mode
+  :commands js2-refactor-mode
+  :ensure t
+  :init
+  (add-hook 'js2-mode-hook #'js2-refactor-mode)
+  :config
+  (js2r-add-keybindings-with-prefix "C-c C-m"))
+
 (use-package xref-js2)
 
-(add-hook 'js2-mode-hook #'js2-refactor-mode)
-(js2r-add-keybindings-with-prefix "C-c C-r")
-(define-key js-mode-map (kbd "C-k") #'js2r-kill)
 
+(define-key js-mode-map (kbd "C-k") #'js2r-kill)
 (define-key js-mode-map (kbd "M-.") nil)
 (add-hook 'js2-mode-hook (lambda ()
                            (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
@@ -156,4 +176,5 @@
  'org-babel-load-languages
  '((javascript . t)
    (python . t)
-   (shell . t)))
+   (shell . t)
+   (http . t)))
