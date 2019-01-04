@@ -1,5 +1,6 @@
 ;; This file is used for the built-in customization UI in Emacs (M-x customize)
 ;; This file will not be affected by Castlemacs updates
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

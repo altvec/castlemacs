@@ -9,7 +9,7 @@
 
 -----
 
-[[README.org#quick-start][Quick Start]] | [[CHANGELOG.org][Changelog]]
+[[#installation][Installation]] | [[CHANGELOG.org][Changelog]]
 
 -----
 
@@ -39,10 +39,11 @@ git clone https://github.com/freetonik/castlemacs ~/.emacs.d
   -  [[#faq][FAQ]]
   -  [[#installation][Installation]]
     -  [[#install-emacs][Install Emacs]]
-      -  [[#why-not-official-build][Why not "official" build?]]
+      -  [[#alternative-version-advanced][Alternative version (advanced)]]
     -  [[#install-dependencies][Install dependencies]]
     -  [[#install-castlemacs][Install Castlemacs]]
     -  [[#setup-keyboard][Setup keyboard]]
+    -  [[#note-to-mojave-users][Note to Mojave users]]
   -  [[#usage][Usage]]
     -  [[#modifier-keys][Modifier keys]]
     -  [[#basics][Basics]]
@@ -107,28 +108,32 @@ Probably, unless it goes against the Core Principles. Feel free to open an issue
 *Does this setup work well in the terminal?*
 It works, but it is not built for terminal use, since one of the Core Principles is to behave like a native macOS application.
 
-*Why is it called Castlemacs?* See [[Why this name?]]
+*Why is it called Castlemacs?* See [[#why-this-name][Why this name?]]
+
+*Where do I store my private config?* You can store your regular private config in =private.el=. This file will not be changed in Castlemacs, so you don't have worry about conflicts.
 
 * Installation
 
 ** Install Emacs
 
-Install Emacs via brew. This will build Emacs from source. It might take some time and can possibly fail.
+Download Emacs from [[https://emacsformacosx.com/][emacsformacosx.com]]. That's it!
+
+*** Alternative version (advanced)
+
+The "simplest way" is the canonical Emacs distribution for macOS. However, it has a number of disadvantages:
+
+- Due to some build options related to graphics, certain extensions like Powerline produce incorrect colors (RGB space issue)
+- No emoji support (if you're into this kind of stuff)
+- No sub-pixel smooth scrolling
+- No native support for =org-protocol=
+
+If these are important to you, consider installing Mitsuharu Yamamoto's port instead.
 
 #+BEGIN_SRC sh
 brew tap railwaycat/emacsmacport
 brew install emacs-mac --with-natural-title-bar
 ln -s /usr/local/opt/emacs-mac/Emacs.app /Applications
 #+END_SRC
-
-*** Why not "official" build?
-
-A canonical version of Emacs for macOS can be found at https://emacsformacosx.com/. However, this version has a number of disadvantages:
-
-- Due to some build options related to graphics, certain extensions like Powerline produce incorrect colors (RGB space issue)
-- No emoji support (if you're into this kind of stuff)
-- No sub-pixel smooth scrolling
-- No native support for =org-protocol=
 
 ** Install dependencies
 
@@ -166,6 +171,12 @@ Don't worry about warning messages on the first launch, they will go away after 
 ** Setup keyboard
 
 *I highly recommend changing Caps Lock to Control* by going to System Preferences → Keyboard → Modifier Keys. This way you will have a more comfortable Control under your left pinky.
+
+If you use Japanese Magic Keyboard, then you don't have to do anything, since =control= is in a good place already.
+
+** Note to Mojave users
+
+In macOS Mojave Emacs build might fail due to some changes in Xcode command line tools. Xcode command line tools *must* be pointed to the release version of Xcode 10 instead of the beta version. Use xcode-select to accomplish this.
 
 * Usage
 
@@ -470,7 +481,7 @@ Learn more about [[https://github.com/smihica/emmet-mode][emmet mode]].
 
 *** Spellchecking
 
-Spellchecking requires an external command to be available. See [[Install dependencies]].
+Spellchecking requires an external command to be available. See [[#install-dependencies][Install dependencies]].
 
 | Binding       | Description                    | Emacs default |
 |---------------+--------------------------------+---------------|
