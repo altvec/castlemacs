@@ -14,14 +14,11 @@
 ;; =======
 ;; VISUALS
 
-
 ;; Modeline settings
 (setq column-number-mode t)
 
-
 ;; Replace default font
-(set-face-attribute 'default nil :font "Input Mono Narrow 15")
-
+(set-face-attribute 'default nil :font "Fira Code 15")
 
 ;; Please stop making noises
 (defun my-bell-function ())
@@ -35,7 +32,6 @@
 
 ;; Newline at end of file
 (setq require-final-newline t)
-
 
 ;; Clojure ecosystem
 (use-package clojure-mode)
@@ -54,11 +50,9 @@
          ("C-c r" . cider-repl-reset)
          ("C-c ." . cider-reset-test-run-tests)))
 
-
 ;; Docker
 (use-package dockerfile-mode
   :ensure t)
-
 
 ;; Javascript
 (use-package js2-mode
@@ -73,7 +67,6 @@
         js2-highlight-level 3
         js2-mode-show-parse-errors nil
         js2-mode-show-strict-warnings nil))
-
 
 (use-package js2-refactor
   :defer t
@@ -92,7 +85,6 @@
 (define-key js-mode-map (kbd "M-.") nil)
 (add-hook 'js2-mode-hook (lambda ()
                            (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
-
 
 ;; Python
 (use-package pipenv
@@ -135,8 +127,6 @@
                           `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
                           `(org-document-title ((t (,@headline ,@variable-tuple :height 1.5 :underline nil))))))
 
-
-
 ;; Store all my org files in ~/Dropbox/org.
 (setq org-directory "~/Dropbox/org")
 
@@ -177,4 +167,6 @@
  '((javascript . t)
    (python . t)
    (shell . t)
-   (http . t)))
+   (http . t)
+   (go . t)
+   (clojurescript . t)))
