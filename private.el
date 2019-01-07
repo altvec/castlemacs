@@ -18,7 +18,7 @@
 (setq column-number-mode t)
 
 ;; Replace default font
-(set-face-attribute 'default nil :font "Fira Code 15")
+(set-face-attribute 'default nil :font "Source Code Pro 15")
 
 ;; Please stop making noises
 (defun my-bell-function ())
