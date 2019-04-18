@@ -14,17 +14,34 @@
 ;; =======
 ;; VISUALS
 
+(load-theme 'dracula)
+
 ;; Modeline settings
 (setq column-number-mode t)
 
 ;; Replace default font
-(set-face-attribute 'default nil :font "Source Code Pro 15")
+(set-face-attribute 'default nil :font "Fira Code 15")
+(setq initial-frame-alist '((width . 135) (height . 55)))
+(setq-default line-spacing 0)
 
 ;; Please stop making noises
 (defun my-bell-function ())
 (setq ring-bell-function 'my-bell-function)
 (setq visible-bell nil)
 
+
+(use-package smartparens
+  :config
+  (require 'smartparens-config)
+  (smartparens-global-mode t)
+  (show-smartparens-global-mode t)
+  (setq sp-show-pair-delay 0)
+  ;; no '' pair in emacs-lisp-mode
+  (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)
+  (sp-local-pair 'markdown-mode "`"   nil :actions '(wrap insert))  ;; only use ` for wrap and auto insertion in markdown-mode
+  (sp-local-tag 'markdown-mode "s" "```scheme" "```")
+  (define-key smartparens-mode-map (kbd "C-s-<right>") 'sp-forward-slurp-sexp)
+  (define-key smartparens-mode-map (kbd "C-s-<left>") 'sp-forward-barf-sexp))
 
 ;; ===========
 ;; PROGRAMMING
@@ -36,9 +53,7 @@
 ;; Clojure ecosystem
 (use-package clojure-mode)
 (use-package cider
-  :ensure t
   :pin melpa-stable
-
   :config
   (add-hook 'cider-repl-mode-hook #'company-mode)
   (add-hook 'cider-mode-hook #'company-mode)
@@ -51,12 +66,10 @@
          ("C-c ." . cider-reset-test-run-tests)))
 
 ;; Docker
-(use-package dockerfile-mode
-  :ensure t)
+(use-package dockerfile-mode)
 
 ;; Javascript
 (use-package js2-mode
-  :ensure t
   :interpreter (("node" . js2-mode))
   :bind (:map js2-mode-map ("C-c C-p" . js2-print-json-path))
   :mode "\\.\\(js\\|json\\)$"
@@ -67,17 +80,14 @@
         js2-highlight-level 3
         js2-mode-show-parse-errors nil
         js2-mode-show-strict-warnings nil))
-
 (use-package js2-refactor
   :defer t
   :diminish js2-refactor-mode
   :commands js2-refactor-mode
-  :ensure t
   :init
   (add-hook 'js2-mode-hook #'js2-refactor-mode)
   :config
   (js2r-add-keybindings-with-prefix "C-c C-m"))
-
 (use-package xref-js2)
 
 
@@ -94,6 +104,31 @@
    pipenv-projectile-after-switch-function
    #'pipenv-projectile-after-switch-extended))
 
+;; Markdown
+(use-package markdown-mode
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "pandoc"))
+
+(eval-after-load 'markdown-mode
+  `(define-key markdown-mode-map (kbd "C-s-<down>") 'markdown-narrow-to-subtree))
+
+(eval-after-load 'markdown-mode
+  `(define-key markdown-mode-map (kbd "C-s-<up>") 'widen))
+
+(require 'markdown-mode)
+(eval-after-load 'markdown-mode
+  `(define-key markdown-mode-map (kbd "s-O") (lambda ()
+                                               (interactive)
+                                               (markdown-kill-ring-save)
+                                               (let ((oldbuf (current-buffer)))
+                                                 (save-current-buffer
+                                                   (set-buffer "*markdown-output*")
+                                                   (with-no-warnings (mark-whole-buffer))
+                                                   (simpleclip-copy (point-min) (point-max)))))))
+
 
 ;; ========
 ;; ORG MODE
@@ -104,9 +139,8 @@
                            (0 (prog1 () (compose-region
                                          (match-beginning 1)
                                          (match-end 1) "•"))))))
-(use-package org-bullets
-    :ensure t)
-  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+(use-package org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 
 (let* ((variable-tuple (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
                              ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
@@ -168,5 +202,4 @@
    (python . t)
    (shell . t)
    (http . t)
-   (go . t)
    (clojurescript . t)))
