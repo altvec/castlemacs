@@ -137,7 +137,6 @@
 (global-set-key (kbd "s-S") 'write-file)              ;; save as
 (global-set-key (kbd "s-q") 'save-buffers-kill-emacs) ;; quit
 (global-set-key (kbd "s-a") 'mark-whole-buffer)       ;; select all
-;; (global-set-key (kbd "s-z") 'undo)
 
 
 ;; Delete trailing spaces and add new line in the end of a file on save.
@@ -460,19 +459,6 @@ point reaches the beginning or end of the buffer, stop there."
 (global-set-key (kbd "M-s-]") 'winner-redo)
 
 
-;; ==================
-;; PROJECT MANAGEMENT
-
-
-;; Use Projectile for project management.
-(use-package projectile
-  :config
-  (define-key projectile-mode-map (kbd "C-s-p") 'projectile-command-map) ;; Ctrl+Cmd+p show projectile menu
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (projectile-mode +1)
-  )
-
-
 ;; ==========================================
 ;; MENUS AND COMPLETION (not code completion)
 
@@ -485,10 +471,13 @@ point reaches the beginning or end of the buffer, stop there."
   (setq ivy-use-virtual-buffers t)      ;; show bookmarks and recent files in buffer list
   (setq ivy-count-format "(%d/%d) ")
   (setq enable-recursive-minibuffers t)
-
+  (setq ivy-initial-inputs-alist nil)
   (setq ivy-re-builders-alist
-      '((swiper . ivy--regex-plus)
-        (t      . ivy--regex-fuzzy)))   ;; enable fuzzy searching everywhere except for Swiper
+        '((swiper . ivy--regex-plus)
+          (swiper-isearch . ivy--regex-plus)
+          (counsel-ag . ivy--regex-plus)
+          (counsel-rg . ivy--regex-plus)
+          (t      . ivy--regex-fuzzy)))   ;; enable fuzzy searching everywhere except for Swiper
 
   (global-set-key (kbd "s-b") 'ivy-switch-buffer)  ;; Cmd+b show buffers and recent files
   (global-set-key (kbd "M-s-b") 'ivy-resume))      ;; Alt+Cmd+b resume whatever Ivy was doing
@@ -497,8 +486,6 @@ point reaches the beginning or end of the buffer, stop there."
 ;; Swiper is a better local finder.
 (use-package swiper
   :config
-  (global-set-key "\C-s" 'swiper)       ;; Default Emacs Isearch forward...
-  (global-set-key "\C-r" 'swiper)       ;; ... and Isearch backward replaced with Swiper
   (global-set-key (kbd "s-f") 'swiper)) ;; Cmd+f find text
 
 
@@ -506,13 +493,17 @@ point reaches the beginning or end of the buffer, stop there."
 (use-package counsel
   :config
   (global-set-key (kbd "M-x") 'counsel-M-x)            ;; Alt+x run command
-  (global-set-key (kbd "s-P") 'counsel-M-x)            ;; Cmd+Shift+p run command
+  (global-set-key (kbd "s-y") 'counsel-yank-pop)
   (global-set-key (kbd "C-x C-f") 'counsel-find-file)  ;; Replace built-in Emacs 'find file' (open file) with Counsel
+  (global-set-key (kbd "s-F") 'counsel-rg)
+  (global-set-key (kbd "s-p") 'counsel-git)
   (global-set-key (kbd "s-o") 'counsel-find-file))     ;; Cmd+o open file
+
+;; When using git ls (via counsel-git), include unstaged files
+(setq counsel-git-cmd "git ls-files --full-name --exclude-standard --others --cached --")
 
 (use-package smex)  ;; show recent commands when invoking Alt-x (or Cmd+Shift+p)
 (use-package flx)   ;; enable fuzzy matching
-(use-package avy)   ;; enable avy for quick navigation
 
 
 ;; Make Ivy a bit more friendly by adding information to ivy buffers, e.g. description of commands in Alt-x, meta info when switching buffers, etc.
@@ -526,8 +517,7 @@ point reaches the beginning or end of the buffer, stop there."
 (use-package counsel-projectile
   :config
   (counsel-projectile-mode 1)
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  (global-set-key (kbd "s-p") 'counsel-projectile-find-file)         ;; Cmd+p open file in current project
+  (global-set-key (kbd "s-p") 'counsel-projectile)         ;; Cmd+p open file in current project
   (global-set-key (kbd "s-F") 'counsel-projectile-ag))     ;; Cmd+Shift+F search in current git repository
 
 
