@@ -14,15 +14,18 @@
 ;; =======
 ;; VISUALS
 
-(load-theme 'dracula)
 
 ;; Modeline settings
 (setq column-number-mode t)
 
 ;; Replace default font
-(set-face-attribute 'default nil :font "Fira Code 15")
+(set-face-attribute 'default nil :font "Inconsolata LGC 14")
 (setq initial-frame-alist '((width . 135) (height . 55)))
 (setq-default line-spacing 0)
+(set-face-background 'show-paren-match "grey84")
+(set-face-attribute 'show-paren-match nil :weight 'extra-bold)
+(show-paren-mode)
+
 
 ;; Please stop making noises
 (defun my-bell-function ())
@@ -42,6 +45,24 @@
   (sp-local-tag 'markdown-mode "s" "```scheme" "```")
   (define-key smartparens-mode-map (kbd "C-s-<right>") 'sp-forward-slurp-sexp)
   (define-key smartparens-mode-map (kbd "C-s-<left>") 'sp-forward-barf-sexp))
+
+
+;; Splitting windows
+(defun vsplit-last-buffer ()
+  (interactive)
+  (split-window-vertically)
+  (other-window 1 nil)
+  (switch-to-next-buffer))
+
+(defun hsplit-last-buffer ()
+  (interactive)
+  (split-window-horizontally)
+  (other-window 1 nil)
+  (switch-to-next-buffer))
+
+(global-set-key (kbd "s-T") 'vsplit-last-buffer) ;; vertically split window
+(global-set-key (kbd "s-t") 'hsplit-last-buffer) ;; horizontally split window
+
 
 ;; ===========
 ;; PROGRAMMING
@@ -96,13 +117,6 @@
 (add-hook 'js2-mode-hook (lambda ()
                            (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t)))
 
-;; Python
-(use-package pipenv
-  :hook (python-mode . pipenv-mode)
-  :init
-  (setq
-   pipenv-projectile-after-switch-function
-   #'pipenv-projectile-after-switch-extended))
 
 ;; Markdown
 (use-package markdown-mode
@@ -162,10 +176,10 @@
                           `(org-document-title ((t (,@headline ,@variable-tuple :height 1.5 :underline nil))))))
 
 ;; Store all my org files in ~/Dropbox/org.
-(setq org-directory "~/Dropbox/org")
+(setq org-directory "~/Google Drive/org")
 
 ;; And all of those files should be in included agenda.
-(setq org-agenda-files '("~/Dropbox/org"))
+(setq org-agenda-files '("~/Google Drive/org"))
 
 ;; Put empty lines between headers
 (setq org-cycle-separator-lines 1)
@@ -183,7 +197,7 @@
 ;; Export links to HTML on save
 (defun org-mode-export-links ()
   "Export links document to HTML automatically when 'links.org' is changed"
-  (when (equal (buffer-file-name) "~/Dropbox/org/links.org")
+  (when (equal (buffer-file-name) "~/Google Drive/org/links.org")
     (progn
       (org-html-export-to-html)
       (message "HTML exported"))))

@@ -436,7 +436,7 @@ point reaches the beginning or end of the buffer, stop there."
 (global-set-key (kbd "s-3") (kbd "C-x 3"))  ;; Cmd-3 split vertically
 (global-set-key (kbd "s-0") (kbd "C-x 0"))  ;; Cmd-0...
 (global-set-key (kbd "s-w") (kbd "C-x 0"))  ;; ...and Cmd-w to close current window
-
+(global-set-key (kbd "s-W") (kbd "C-x 1"))  ;; close others with shift
 
 ;; Move between windows with Control-Command-Arrow and with =Cmd= just like in iTerm.
 (use-package windmove
