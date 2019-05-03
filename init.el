@@ -165,7 +165,7 @@
 
 ;; Enable transparent title bar on macOS
 (when (memq window-system '(mac ns))
-  (add-to-list 'default-frame-alist '(ns-appearance . dark)) ;; {light, dark}
+  (add-to-list 'default-frame-alist '(ns-appearance . light)) ;; {light, dark}
   (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t)))
 
 
@@ -440,16 +440,9 @@ point reaches the beginning or end of the buffer, stop there."
 ;; Move between windows with Control-Command-Arrow and with =Cmd= just like in iTerm.
 (use-package windmove
   :config
-  (global-set-key (kbd "<C-s-left>")  'windmove-left)  ;; Ctrl+Cmd+left go to left window
   (global-set-key (kbd "s-[")  'windmove-left)         ;; Cmd+[ go to left window
-
-  (global-set-key (kbd "<C-s-right>") 'windmove-right) ;; Ctrl+Cmd+right go to right window
   (global-set-key (kbd "s-]")  'windmove-right)        ;; Cmd+] go to right window
-
-  (global-set-key (kbd "<C-s-up>")    'windmove-up)    ;; Ctrl+Cmd+up go to upper window
   (global-set-key (kbd "s-{")  'windmove-up)           ;; Cmd+Shift+[ go to upper window
-
-  (global-set-key (kbd "<C-s-down>")  'windmove-down)  ;; Ctrl+Cmd+down go to down window
   (global-set-key (kbd "s-}")  'windmove-down))        ;; Cmd+Shift+] got to down window
 
 
@@ -562,7 +555,7 @@ point reaches the beginning or end of the buffer, stop there."
 (use-package company
   :config
   (setq company-idle-delay 0.1)
-  (setq company-global-modes '(not org-mode))
+  (setq company-global-modes '(not org-mode markdown-mode))
   (setq company-minimum-prefix-length 1)
   (add-hook 'after-init-hook 'global-company-mode))
 
@@ -626,19 +619,9 @@ point reaches the beginning or end of the buffer, stop there."
 ;; Web-mode is an autonomous emacs major-mode for editing web templates.
 ;; HTML documents can embed parts (CSS / JavaScript) and blocks (client / server side).
 (use-package web-mode
+  :mode ("\\.html\\'")
   :config
-  (setq web-mode-markup-indent-offset 2)
-  (add-to-list 'auto-mode-alist '("\\.phtml\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.tpl\\.php\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.[agj]sp\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.as[cp]x\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.erb\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.mustache\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.djhtml\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.js?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.css?\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.xml?\\'" . web-mode)))
+  (setq web-mode-markup-indent-offset 2))
 
 
 ;; Emmet
@@ -649,8 +632,9 @@ point reaches the beginning or end of the buffer, stop there."
   (setq emmet-move-cursor-between-quotes t)
   :config
   (add-hook 'sgml-mode-hook 'emmet-mode) ;; Auto-start on any markup modes
+  (add-hook 'web-mode-hook  'emmet-mode)
+  (add-hook 'html-mode-hook 'emmet-mode)
   (add-hook 'css-mode-hook  'emmet-mode)) ;; enable Emmet's css abbreviation.
-;; Ctrl+j or Ctrl+Enter to expand
 
 
 ;; ========

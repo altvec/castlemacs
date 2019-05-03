@@ -33,20 +33,6 @@
 (setq visible-bell nil)
 
 
-(use-package smartparens
-  :config
-  (require 'smartparens-config)
-  (smartparens-global-mode t)
-  (show-smartparens-global-mode t)
-  (setq sp-show-pair-delay 0)
-  ;; no '' pair in emacs-lisp-mode
-  (sp-local-pair 'emacs-lisp-mode "'" nil :actions nil)
-  (sp-local-pair 'markdown-mode "`"   nil :actions '(wrap insert))  ;; only use ` for wrap and auto insertion in markdown-mode
-  (sp-local-tag 'markdown-mode "s" "```scheme" "```")
-  (define-key smartparens-mode-map (kbd "C-s-<right>") 'sp-forward-slurp-sexp)
-  (define-key smartparens-mode-map (kbd "C-s-<left>") 'sp-forward-barf-sexp))
-
-
 ;; Splitting windows
 (defun vsplit-last-buffer ()
   (interactive)
@@ -147,33 +133,6 @@
 ;; ========
 ;; ORG MODE
 
-;; Nicer bullets
-(font-lock-add-keywords 'org-mode
-                        '(("^ +\\([-*]\\) "
-                           (0 (prog1 () (compose-region
-                                         (match-beginning 1)
-                                         (match-end 1) "•"))))))
-(use-package org-bullets)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-
-(let* ((variable-tuple (cond ((x-list-fonts "Source Sans Pro") '(:font "Source Sans Pro"))
-                             ((x-list-fonts "Lucida Grande")   '(:font "Lucida Grande"))
-                             ((x-list-fonts "Verdana")         '(:font "Verdana"))
-                             ((x-family-fonts "Sans Serif")    '(:family "Sans Serif"))
-                             (nil (warn "Cannot find a Sans Serif Font.  Install Source Sans Pro."))))
-       (base-font-color     (face-foreground 'default nil 'default))
-       (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
-
-  (custom-theme-set-faces 'user
-                          `(org-level-8 ((t (,@headline ,@variable-tuple))))
-                          `(org-level-7 ((t (,@headline ,@variable-tuple))))
-                          `(org-level-6 ((t (,@headline ,@variable-tuple))))
-                          `(org-level-5 ((t (,@headline ,@variable-tuple))))
-                          `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
-                          `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
-                          `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.5))))
-                          `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.75))))
-                          `(org-document-title ((t (,@headline ,@variable-tuple :height 1.5 :underline nil))))))
 
 ;; Store all my org files in ~/Dropbox/org.
 (setq org-directory "~/Google Drive/org")
